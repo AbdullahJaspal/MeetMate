@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,6 +6,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Animated,
+  Button,
+  ScrollView,
 } from 'react-native';
 import {Icon, Input} from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -17,6 +20,25 @@ const Signup = () => {
     console.log(image1);
   });
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 5000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+  };
   // custom comps
 
   const InputFields = ({
@@ -81,64 +103,65 @@ const Signup = () => {
 
   return (
     <View style={{flex: 1}}>
-      <Image
-        source={require('../../../assets/images/signup.jpg')}
-        style={styles.topImage}
-      />
-      <View
+      <Animated.View
         style={{
-          borderColor: '#E3E9F2',
-          borderWidth: 1,
-          width: '95%',
-          alignSelf: 'center',
-        }}
-      />
-      <View
-        style={{
-          width: '95%',
-          alignSelf: 'center',
-          marginTop: 20,
+          // Bind opacity to animated value
+          opacity: fadeAnim,
         }}>
+        <Image
+          source={require('../../../assets/images/signup.jpg')}
+          style={[styles.topImage]}
+        />
+        <View style={styles.line} />
         <Text style={{fontSize: 18, fontWeight: '700', color: '#333333'}}>
           Sign-up
         </Text>
-        <View style={styles.cameraIconCont}>
-          <Icon name="camera-retro" type={'font-awesome'} size={14} />
+      </Animated.View>
+      <ScrollView>
+        <View
+          style={{
+            width: '95%',
+            alignSelf: 'center',
+            marginTop: 20,
+          }}>
+          <View style={styles.cameraIconCont}>
+            <Icon name="camera-retro" type={'font-awesome'} size={14} />
+          </View>
         </View>
-      </View>
-      <View style={{width: '100%'}}>
-        <InputFields
-          title={'First Name'}
-          placeholder="Enter your first Name"
-          height={45}
-        />
-        <InputFields
-          height={45}
-          title={'Last Name'}
-          placeholder="Enter your last Name"
-        />
-        <InputFields
-          height={45}
-          title={'Accupation'}
-          placeholder="What do you do.."
-        />
-        <InputFields
-          height={45}
-          title={'Education'}
-          placeholder="What is you education"
-        />
-        <InputFields
-          height={45}
-          title={'Education'}
-          placeholder="What is you education"
-        />
-        <InputFields
-          height={100}
-          title={'Bio'}
-          placeholder="Write something about yourself"
-          multiline
-        />
-      </View>
+        <View style={{width: '100%'}}>
+          <InputFields
+            title={'First Name'}
+            placeholder="Enter your first Name"
+            height={45}
+          />
+          <InputFields
+            height={45}
+            title={'Last Name'}
+            placeholder="Enter your last Name"
+          />
+          <InputFields
+            height={45}
+            title={'Accupation'}
+            placeholder="What do you do.."
+          />
+          <InputFields
+            height={45}
+            title={'Education'}
+            placeholder="What is you education"
+          />
+          <InputFields
+            height={45}
+            title={'Education'}
+            placeholder="What is you education"
+          />
+          <InputFields
+            height={100}
+            title={'Bio'}
+            placeholder="Write something about yourself"
+            multiline
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -148,6 +171,12 @@ const styles = StyleSheet.create({
     width: '50%',
     height: 150,
     resizeMode: 'contain',
+    alignSelf: 'center',
+  },
+  line: {
+    borderColor: '#E3E9F2',
+    borderWidth: 1,
+    width: '95%',
     alignSelf: 'center',
   },
   cameraIconCont: {
